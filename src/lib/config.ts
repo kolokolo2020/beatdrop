@@ -1,6 +1,14 @@
 /** The producer the site belongs to. Shown on every page and in link previews. */
 export const PRODUCER = process.env.PRODUCER_NAME?.trim() || "saeculo";
 
+/**
+ * The address share links and link previews use, whichever address the
+ * upload page was opened on. Override with SITE_URL.
+ */
+export const SITE_URL =
+  process.env.SITE_URL?.replace(/\/$/, "") ||
+  (process.env.VERCEL_ENV === "production" ? "https://saeculo-beats.vercel.app" : "");
+
 /** Real links, from the saeculo site's profile. Shown in the footer. */
 export const LINKS = [
   { label: "Instagram", url: "https://www.instagram.com/saeculo/" },

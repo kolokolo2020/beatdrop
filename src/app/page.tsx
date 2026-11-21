@@ -1,6 +1,6 @@
 import { connection } from "next/server";
 import { isAdmin, passwordConfigured } from "@/lib/auth";
-import { UPLOAD_MODE, USE_BLOB } from "@/lib/config";
+import { SITE_URL, UPLOAD_MODE, USE_BLOB } from "@/lib/config";
 import Brand from "./Brand";
 import { listPacks } from "@/lib/packs";
 import { packPath } from "@/lib/slug";
@@ -50,14 +50,14 @@ export default async function Home() {
       {!USE_BLOB && (
         <p className="muted small">Local mode: files are saved in <code className="mono">.data/</code>. Connect Vercel Blob to go live.</p>
       )}
-      <Uploader mode={UPLOAD_MODE} />
+      <Uploader mode={UPLOAD_MODE} site={SITE_URL} />
       <section className="stack" aria-label="Packs">
         {packs.length === 0 && <p className="muted">No packs yet. Upload a few beats above.</p>}
         {packs.map((pack) => (
           <article key={pack.id} className="panel">
             <div className="spread" style={{ alignItems: "flex-start" }}>
               <div style={{ minWidth: 0 }}>
-                <a href={packPath(pack)} target="_blank" rel="noreferrer" style={{ fontWeight: 600, overflowWrap: "anywhere" }}>{pack.title}</a>
+                <a href={`${SITE_URL}${packPath(pack)}`} target="_blank" rel="noreferrer" style={{ fontWeight: 600, overflowWrap: "anywhere" }}>{pack.title}</a>
                 <p className="muted small" style={{ margin: "2px 0 0" }}>
                   {pack.tracks.length} {pack.tracks.length === 1 ? "beat" : "beats"} ·{" "}
                   {new Date(pack.createdAt).toLocaleDateString("en", { day: "numeric", month: "short", year: "numeric" })}
@@ -65,7 +65,7 @@ export default async function Home() {
               </div>
             </div>
             <div className="row" style={{ marginTop: 12 }}>
-              <CopyLink path={packPath(pack)} />
+              <CopyLink path={packPath(pack)} site={SITE_URL} />
               <DeleteButton id={pack.id} title={pack.title} />
             </div>
           </article>

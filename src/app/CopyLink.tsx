@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 
-export default function CopyLink({ path, label = "Copy link" }: { path: string; label?: string }) {
+export default function CopyLink({ path, site, label = "Copy link" }: { path: string; site?: string; label?: string }) {
   const [done, setDone] = useState(false);
   async function copy() {
-    const url = new URL(path, window.location.origin).toString();
+    const url = new URL(path, site || window.location.origin).toString();
     try {
       await navigator.clipboard.writeText(url);
     } catch {

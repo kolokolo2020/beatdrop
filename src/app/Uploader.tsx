@@ -34,7 +34,7 @@ function localUpload(file: File, pathname: string, onProgress: (p: number) => vo
   });
 }
 
-export default function Uploader({ mode }: { mode: "token" | "presigned" | "local" }) {
+export default function Uploader({ mode, site }: { mode: "token" | "presigned" | "local"; site: string }) {
   const router = useRouter();
   const input = useRef<HTMLInputElement>(null);
   const [items, setItems] = useState<Item[]>([]);
@@ -150,8 +150,8 @@ export default function Uploader({ mode }: { mode: "token" | "presigned" | "loca
         <div className="spread" role="status" style={{ borderTop: "1px solid var(--line)", paddingTop: 12 }}>
           <span>“{done.title}” is ready.</span>
           <span className="row">
-            <a className="btn small" href={done.path} target="_blank" rel="noreferrer">Open</a>
-            <CopyLink path={done.path} />
+            <a className="btn small" href={`${site}${done.path}`} target="_blank" rel="noreferrer">Open</a>
+            <CopyLink path={done.path} site={site} />
           </span>
         </div>
       )}
