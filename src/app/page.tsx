@@ -1,7 +1,9 @@
 import { connection } from "next/server";
 import { isAdmin, passwordConfigured } from "@/lib/auth";
 import { UPLOAD_MODE, USE_BLOB } from "@/lib/config";
+import Brand from "./Brand";
 import { listPacks } from "@/lib/packs";
+import { packPath } from "@/lib/slug";
 import { logout } from "./actions";
 import CopyLink from "./CopyLink";
 import DeleteButton from "./DeleteButton";
@@ -25,7 +27,8 @@ export default async function Home() {
   if (!(await isAdmin())) {
     return (
       <main className="wrap" style={{ maxWidth: 400 }}>
-        <p className="eyebrow">Uploads</p>
+        <Brand />
+        <p className="eyebrow" style={{ marginTop: 40 }}>Uploads</p>
         <h1>Sign in</h1>
         <LoginForm />
       </main>
@@ -36,7 +39,8 @@ export default async function Home() {
 
   return (
     <main className="wrap stack">
-      <div className="spread">
+      <Brand />
+      <div className="spread" style={{ marginTop: 32 }}>
         <div>
           <p className="eyebrow">Uploads</p>
           <h1 style={{ margin: 0 }}>Your packs</h1>
@@ -53,7 +57,7 @@ export default async function Home() {
           <article key={pack.id} className="panel">
             <div className="spread" style={{ alignItems: "flex-start" }}>
               <div style={{ minWidth: 0 }}>
-                <a href={`/p/${pack.id}`} target="_blank" rel="noreferrer" style={{ fontWeight: 600, overflowWrap: "anywhere" }}>{pack.title}</a>
+                <a href={packPath(pack)} target="_blank" rel="noreferrer" style={{ fontWeight: 600, overflowWrap: "anywhere" }}>{pack.title}</a>
                 <p className="muted small" style={{ margin: "2px 0 0" }}>
                   {pack.tracks.length} {pack.tracks.length === 1 ? "beat" : "beats"} ·{" "}
                   {new Date(pack.createdAt).toLocaleDateString("en", { day: "numeric", month: "short", year: "numeric" })}
@@ -61,7 +65,7 @@ export default async function Home() {
               </div>
             </div>
             <div className="row" style={{ marginTop: 12 }}>
-              <CopyLink path={`/p/${pack.id}`} />
+              <CopyLink path={packPath(pack)} />
               <DeleteButton id={pack.id} title={pack.title} />
             </div>
           </article>

@@ -6,6 +6,7 @@ import { upload, uploadPresigned } from "@vercel/blob/client";
 import { nanoid } from "nanoid";
 import { createPack } from "./actions";
 import CopyLink from "./CopyLink";
+import { newPackId, packPath } from "@/lib/slug";
 
 type Item = { key: string; file: File; progress: number };
 type Uploaded = { name: string; url: string; downloadUrl: string; size: number; pathname: string };
@@ -42,7 +43,7 @@ export default function Uploader({ mode }: { mode: "token" | "presigned" | "loca
   const [over, setOver] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  const [done, setDone] = useState<{ id: string; title: string } | null>(null);
+  const [done, setDone] = useState<{ path: string; title: string } | null>(null);
 
   function add(files: FileList | null) {
     if (!files) return;
@@ -58,7 +59,7 @@ export default function Uploader({ mode }: { mode: "token" | "presigned" | "loca
     if (!items.length || busy) return;
     setBusy(true);
     setError("");
-    const id = nanoid(10);
+    const id = newPackId();
     const packTitle = title.trim() || "Beats";
     try {
       const uploaded: Uploaded[] = [];
@@ -89,7 +90,7 @@ export default function Uploader({ mode }: { mode: "token" | "presigned" | "loca
         setProgress(1);
       }
       await createPack({ id, title: packTitle, note, tracks: uploaded });
-      setDone({ id, title: packTitle });
+      setDone({ path: packPath({ id, title: packTitle }), title: packTitle });
       setItems([]);
       setTitle("");
       setNote("");
@@ -106,7 +107,7 @@ export default function Uploader({ mode }: { mode: "token" | "presigned" | "loca
       <h2>New pack</h2>
       <label className="field">
         <span>Name (the artist sees this)</span>
-        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Beats for Vee" maxLength={120} />
+        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. sum new beats – november" maxLength={120} />
       </label>
       <label className="field">
         <span>Note (optional)</span>
@@ -149,8 +150,8 @@ export default function Uploader({ mode }: { mode: "token" | "presigned" | "loca
         <div className="spread" role="status" style={{ borderTop: "1px solid var(--line)", paddingTop: 12 }}>
           <span>“{done.title}” is ready.</span>
           <span className="row">
-            <a className="btn small" href={`/p/${done.id}`} target="_blank" rel="noreferrer">Open</a>
-            <CopyLink path={`/p/${done.id}`} />
+            <a className="btn small" href={done.path} target="_blank" rel="noreferrer">Open</a>
+            <CopyLink path={done.path} />
           </span>
         </div>
       )}

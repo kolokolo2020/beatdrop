@@ -1,5 +1,13 @@
-/** Shown at the top of every pack page and in link previews. Optional. */
-export const PRODUCER = process.env.PRODUCER_NAME?.trim() || "";
+/** The producer the site belongs to. Shown on every page and in link previews. */
+export const PRODUCER = process.env.PRODUCER_NAME?.trim() || "saeculo";
+
+/** Real links, from the saeculo site's profile. Shown in the footer. */
+export const LINKS = [
+  { label: "Instagram", url: "https://www.instagram.com/saeculo/" },
+  { label: "Spotify", url: "https://open.spotify.com/artist/20rwZAautzWKkxjkYA9sfg" },
+  { label: "SoundCloud", url: "https://soundcloud.com/saeculo" },
+  { label: "YouTube", url: "https://www.youtube.com/@saeculo" },
+];
 
 /**
  * How files reach Vercel Blob. A store connected the classic way gives the
