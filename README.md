@@ -1,36 +1,27 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# beatdrop
 
-## Getting Started
+Upload a few beats, get a link, send it to an artist. They can play every beat
+and download it (one by one or all at once). No account needed on their side.
 
-First, run the development server:
+- `/` — your upload page (password protected): name the pack, add a note,
+  drop in MP3/WAV/FLAC/ZIP files, get a link to copy. Lists your packs with
+  Copy link and Delete.
+- `/p/<id>` — the page you send. The id is random, so only people with the link
+  find it. Inside Instagram's in-app browser it tells them to open it in their
+  real browser, since Instagram blocks downloads.
+
+## Settings (Vercel → Project → Settings → Environment Variables)
+
+| Variable | |
+| --- | --- |
+| `UPLOAD_PASSWORD` | Required. The password for the upload page. |
+| `BLOB_READ_WRITE_TOKEN` | Set automatically when a Vercel Blob store is connected to the project. |
+| `PRODUCER_NAME` | Optional. Shown above the pack title and in link previews. |
+
+Without `BLOB_READ_WRITE_TOKEN` (local dev) files are kept in `.data/`.
+
+## Develop
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+UPLOAD_PASSWORD=test npm run dev
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
