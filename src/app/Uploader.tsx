@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { upload } from "@vercel/blob/client";
+import { upload, uploadPresigned } from "@vercel/blob/client";
 import { nanoid } from "nanoid";
 import { createPack } from "./actions";
 import CopyLink from "./CopyLink";
@@ -33,7 +33,7 @@ function localUpload(file: File, pathname: string, onProgress: (p: number) => vo
   });
 }
 
-export default function Uploader({ useBlob }: { useBlob: boolean }) {
+export default function Uploader({ mode }: { mode: "token" | "presigned" | "local" }) {
   const router = useRouter();
   const input = useRef<HTMLInputElement>(null);
   const [items, setItems] = useState<Item[]>([]);
@@ -66,11 +66,13 @@ export default function Uploader({ useBlob }: { useBlob: boolean }) {
         const pathname = `audio/${id}/${nanoid(6)}/${cleanName(item.file.name)}`;
         const setProgress = (p: number) =>
           setItems((prev) => prev.map((x) => (x.key === item.key ? { ...x, progress: p } : x)));
-        if (useBlob) {
-          const blob = await upload(pathname, item.file, {
+        if (mode !== "local") {
+          const send = mode === "presigned" ? uploadPresigned : upload;
+          const blob = await send(pathname, item.file, {
             access: "public",
             handleUploadUrl: "/api/upload",
-            multipart: item.file.size > 20 * 1024 * 1024,
+            // Presigned uploads go up as one request; token uploads split big files.
+            multipart: mode === "token" && item.file.size > 20 * 1024 * 1024,
             contentType: item.file.type || undefined,
             onUploadProgress: ({ percentage }) => setProgress(percentage / 100),
           });

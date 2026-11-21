@@ -1,6 +1,6 @@
 import { connection } from "next/server";
 import { isAdmin, passwordConfigured } from "@/lib/auth";
-import { USE_BLOB } from "@/lib/config";
+import { UPLOAD_MODE, USE_BLOB } from "@/lib/config";
 import { listPacks } from "@/lib/packs";
 import { logout } from "./actions";
 import CopyLink from "./CopyLink";
@@ -46,7 +46,7 @@ export default async function Home() {
       {!USE_BLOB && (
         <p className="muted small">Local mode: files are saved in <code className="mono">.data/</code>. Connect Vercel Blob to go live.</p>
       )}
-      <Uploader useBlob={USE_BLOB} />
+      <Uploader mode={UPLOAD_MODE} />
       <section className="stack" aria-label="Packs">
         {packs.length === 0 && <p className="muted">No packs yet. Upload a few beats above.</p>}
         {packs.map((pack) => (

@@ -15,10 +15,10 @@ and download it (one by one or all at once). No account needed on their side.
 | Variable | |
 | --- | --- |
 | `UPLOAD_PASSWORD` | Required. The password for the upload page. |
-| `BLOB_READ_WRITE_TOKEN` | Set automatically when a Vercel Blob store is connected to the project. |
+| `BLOB_STORE_ID` or `BLOB_READ_WRITE_TOKEN` | Set automatically when a Vercel Blob store is connected to the project (newer stores give only `BLOB_STORE_ID` and sign in with OIDC; uploads then use presigned URLs). |
 | `PRODUCER_NAME` | Optional. Shown above the pack title and in link previews. |
 
-Without `BLOB_READ_WRITE_TOKEN` (local dev) files are kept in `.data/`.
+Without either (local dev) files are kept in `.data/`.
 
 ## Develop
 
